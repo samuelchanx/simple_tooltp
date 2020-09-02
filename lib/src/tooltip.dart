@@ -96,6 +96,8 @@ class SimpleTooltip extends StatefulWidget {
   /// the widget's route is not active
   final RouteObserver<PageRoute> routeObserver;
 
+  Offset offset;
+
   SimpleTooltip({
     Key key,
     @required this.child,
@@ -114,6 +116,7 @@ class SimpleTooltip extends StatefulWidget {
     this.arrowBaseWidth = 20.0,
     this.borderRadius = 10,
     this.borderWidth = 2.0,
+    this.offset,
     this.borderColor = const Color(0xFF50FFFF),
     this.animationDuration = const Duration(milliseconds: 460),
     this.backgroundColor = const Color(0xFFFFFFFF),
@@ -290,33 +293,36 @@ class SimpleTooltipState extends State<SimpleTooltip> with RouteAware {
                 _removeTooltip();
               }
             },
-            child: _Ballon(
-              content: widget.content,
-              borderRadius: widget.borderRadius,
-              arrowBaseWidth: widget.arrowBaseWidth,
-              arrowLength: widget.arrowLength,
-              arrowTipDistance: widget.arrowTipDistance,
-              ballonPadding: widget.ballonPadding,
-              borderColor: widget.borderColor,
-              borderWidth: widget.borderWidth,
-              tooltipDirection: widget.tooltipDirection,
-              backgroundColor: widget.backgroundColor,
-              shadows: widget.customShadows,
-              onTap: () {
-                if (widget.hideOnTooltipTap) {
-                  _removeTooltip();
-                  _showTooltip(buildHidding: true);
-                }
-                if (widget.tooltipTap != null) {
-                  widget.tooltipTap();
-                }
-              },
-              onSizeChange: (ballonSize) {
-                if (!mounted) return;
-                _ballonSize = ballonSize;
-                doCheckForObfuscation();
-                doShowOrHide();
-              },
+            child: Transform.translate(
+              offset: widget.offset ?? Offset(0, 0),
+              child: _Ballon(
+                content: widget.content,
+                borderRadius: widget.borderRadius,
+                arrowBaseWidth: widget.arrowBaseWidth,
+                arrowLength: widget.arrowLength,
+                arrowTipDistance: widget.arrowTipDistance,
+                ballonPadding: widget.ballonPadding,
+                borderColor: widget.borderColor,
+                borderWidth: widget.borderWidth,
+                tooltipDirection: widget.tooltipDirection,
+                backgroundColor: widget.backgroundColor,
+                shadows: widget.customShadows,
+                onTap: () {
+                  if (widget.hideOnTooltipTap) {
+                    _removeTooltip();
+                    _showTooltip(buildHidding: true);
+                  }
+                  if (widget.tooltipTap != null) {
+                    widget.tooltipTap();
+                  }
+                },
+                onSizeChange: (ballonSize) {
+                  if (!mounted) return;
+                  _ballonSize = ballonSize;
+                  doCheckForObfuscation();
+                  doShowOrHide();
+                },
+              ),
             ),
           ),
           // arrowBaseWidth: widget.arrowBaseWidth,
