@@ -96,7 +96,7 @@ class SimpleTooltip extends StatefulWidget {
   /// the widget's route is not active
   final RouteObserver<PageRoute> routeObserver;
 
-  Offset offset;
+  final Offset offset;
 
   SimpleTooltip({
     Key key,
